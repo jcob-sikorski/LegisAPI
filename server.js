@@ -4,6 +4,9 @@ const express = require('express');
 const stripe = require('stripe')(process.env.stripeSk);
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Make sure to install this package
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 // This will enable CORS for all resources on your server
@@ -11,6 +14,12 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+
+// setup the logger
+app.use(morgan('combined', { stream: accessLogStream }))
 
 app.post('/create-checkout-session', async (req, res) => {
   const site_id = req.query.site_id;
