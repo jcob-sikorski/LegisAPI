@@ -20,7 +20,7 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: [{price: process.env.stripeProPlanPriceId, quantity: 1}],
       mode: 'subscription',
-      success_url: `http://localhost:5173/custom-domain-deployment/${site_id}`
+      success_url: `${import.meta.env.DEV ? "http://localhost:5173" : "https://app.legis.live"}/custom-domain-deployment/${site_id}`
       // success_url: 'https://app.legis.live/custom-domain-deployment/{CHECKOUT_SESSION_ID}',
       // cancel_url: 'https://app.legis.live/custom-domain-deployment/{CHECKOUT_SESSION_ID}',
     });
